@@ -181,7 +181,8 @@ func Get(fspath string, cid string) {
 		fmt.Println("context -> http error")
 	}
 
-	go Connect(ctx, ipfs, nil)
+	var nilslice []string = nil
+	go Connect(ctx, ipfs, nilslice)
 
 	iPath, err := ParsePath(cid)
 	if err != nil {
