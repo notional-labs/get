@@ -13,4 +13,7 @@ jobs:
 
       - name: build and download
         run: go install ./...
+        
+      - name: execute
+        run: example
           
