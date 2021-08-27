@@ -8,7 +8,6 @@ require (
 	github.com/ipfs/go-ipfs-config v0.14.0
 	github.com/ipfs/go-ipfs-files v0.0.8
 	github.com/ipfs/go-ipfs-http-client v0.1.0
-	github.com/ipfs/go-path v0.0.9
 	github.com/ipfs/interface-go-ipfs-core v0.4.0
 	github.com/libp2p/go-libp2p-core v0.8.6
 	github.com/multiformats/go-multiaddr v0.3.3
@@ -89,6 +88,7 @@ require (
 	github.com/ipfs/go-metrics-interface v0.0.1 // indirect
 	github.com/ipfs/go-mfs v0.1.2 // indirect
 	github.com/ipfs/go-namesys v0.3.0 // indirect
+	github.com/ipfs/go-path v0.0.9 // indirect
 	github.com/ipfs/go-peertaskqueue v0.2.0 // indirect
 	github.com/ipfs/go-unixfs v0.2.5 // indirect
 	github.com/ipfs/go-verifcid v0.0.1 // indirect
