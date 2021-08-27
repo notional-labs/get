@@ -5,12 +5,13 @@ go 1.17
 require (
 	github.com/cheggaaa/pb v1.0.29
 	github.com/ipfs/go-ipfs v0.9.1
-	github.com/ipfs/go-ipfs-config v0.16.0
+	github.com/ipfs/go-ipfs-config v0.14.0
 	github.com/ipfs/go-ipfs-files v0.0.8
 	github.com/ipfs/go-ipfs-http-client v0.1.0
-	github.com/ipfs/interface-go-ipfs-core v0.5.2
-	github.com/libp2p/go-libp2p-core v0.9.0
-	github.com/multiformats/go-multiaddr v0.4.0
+	github.com/ipfs/go-path v0.0.9
+	github.com/ipfs/interface-go-ipfs-core v0.4.0
+	github.com/libp2p/go-libp2p-core v0.8.6
+	github.com/multiformats/go-multiaddr v0.3.3
 
 )
 
@@ -60,7 +61,6 @@ require (
 	github.com/ipfs/go-ds-flatfs v0.4.5 // indirect
 	github.com/ipfs/go-ds-leveldb v0.4.2 // indirect
 	github.com/ipfs/go-ds-measure v0.1.0 // indirect
-	github.com/ipfs/go-fetcher v1.5.0 // indirect
 	github.com/ipfs/go-filestore v0.0.3 // indirect
 	github.com/ipfs/go-fs-lock v0.0.6 // indirect
 	github.com/ipfs/go-graphsync v0.8.0 // indirect
@@ -89,7 +89,6 @@ require (
 	github.com/ipfs/go-metrics-interface v0.0.1 // indirect
 	github.com/ipfs/go-mfs v0.1.2 // indirect
 	github.com/ipfs/go-namesys v0.3.0 // indirect
-	github.com/ipfs/go-path v0.1.1 // indirect
 	github.com/ipfs/go-peertaskqueue v0.2.0 // indirect
 	github.com/ipfs/go-unixfs v0.2.5 // indirect
 	github.com/ipfs/go-verifcid v0.0.1 // indirect
