@@ -26,17 +26,18 @@ var (
 )
 
 // Connect Gets us connected to the IPFS network
-func Connect(ctx context.Context, ipfs iface.CoreAPI, peers []string) error {
+func Connect(ctx context.Context, ipfs iface.CoreAPI, peers []string) {
 	var wg sync.WaitGroup
 	pinfos := make(map[peer.ID]*peer.AddrInfo, len(peers))
 	for _, addrStr := range peers {
 		addr, err := ma.NewMultiaddr(addrStr)
 		if err != nil {
-			return err
+			fmt.Println("multiaddress issue!")
+
 		}
 		pii, err := peer.AddrInfoFromP2pAddr(addr)
 		if err != nil {
-			return err
+			fmt.Println("cannot connect!")
 		}
 		pi, ok := pinfos[pii.ID]
 		if !ok {
@@ -59,7 +60,6 @@ func Connect(ctx context.Context, ipfs iface.CoreAPI, peers []string) error {
 		}(pi)
 	}
 	wg.Wait()
-	return nil
 }
 
 // WriteTo writes the given node to the local filesystem at fpath.
