@@ -25,6 +25,7 @@ var (
 	cleanupMutex sync.Mutex
 )
 
+
 // Connect Gets us connected to the IPFS network
 func Connect(ctx context.Context, ipfs iface.CoreAPI, peers []string) error {
 	var wg sync.WaitGroup
@@ -172,8 +173,6 @@ func http(ctx context.Context) (iface.CoreAPI, error) {
 func Get(fspath string, cid string) {
 	//cleanup when done
 	defer DoCleanup()
-
-	var ipfs iface.CoreAPI
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
