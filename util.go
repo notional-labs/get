@@ -13,6 +13,7 @@ import (
 
 	"github.com/cheggaaa/pb"
 	files "github.com/ipfs/go-ipfs-files"
+	ipfshttp "github.com/ipfs/go-ipfs-http-client"
 	iface "github.com/ipfs/interface-go-ipfs-core"
 	ipath "github.com/ipfs/interface-go-ipfs-core/path"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -155,7 +156,19 @@ func DoCleanup() {
 	}
 }
 
-// Get is a Terse, zero confugration ipfs getter for Go coders which always shows a progress bar.
+func http(ctx context.Context) (iface.CoreAPI, error) {
+	httpApi, err := ipfshttp.NewLocalApi()
+	if err != nil {
+		return nil, err
+	}
+	err = httpApi.Request("version").Exec(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	return httpApi, nil
+}
+
+// Get takes fspath and cid, and then downloads a file from ipfs
 func Get(fspath string, cid string) {
 	//cleanup when done
 	defer DoCleanup()
@@ -165,7 +178,7 @@ func Get(fspath string, cid string) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	ipfs, err := Http(ctx)
+	ipfs, err := http(ctx)
 
 	go Connect(ctx, ipfs, nil)
 
