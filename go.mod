@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/cheggaaa/pb v1.0.29
-	github.com/ipfs/go-ipfs v0.9.0
+	github.com/ipfs/go-ipfs v0.9.1
 	github.com/ipfs/go-ipfs-config v0.14.0
 	github.com/ipfs/go-ipfs-files v0.0.8
 	github.com/ipfs/go-ipfs-http-client v0.1.0
