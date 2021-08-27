@@ -161,11 +161,12 @@ func http(ctx context.Context) (iface.CoreAPI, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	err = httpApi.Request("version").Exec(ctx, nil)
 	if err != nil {
 		return nil, err
 	}
-	return httpApi, nil
+	return httpApi, err
 }
 
 // Get takes fspath and cid, and then downloads a file from ipfs
