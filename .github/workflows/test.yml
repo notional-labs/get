@@ -4,12 +4,12 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-go@latest
-    - run: |
-        go mod tidy
-        cd example
-        go build .
-        ./example
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-go@latest
+      - run: |
+          go mod tidy
+          cd example
+          go build .
+          ./example
