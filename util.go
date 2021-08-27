@@ -175,11 +175,13 @@ func Get(fspath string, cid string) {
 	defer DoCleanup()
 
 	ctx, cancel := context.WithCancel(context.Background())
+
 	defer cancel()
 
 	ipfs, err := http(ctx)
 	if err != nil {
-		fmt.Println("context -> http error")
+		fmt.Println(err)
+		fmt.Println("flksdfj")
 	}
 
 	var nilslice []string = nil
