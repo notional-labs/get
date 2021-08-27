@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-go@latest
+      - uses: actions/setup-go@2.1.4
       - run: |
           go mod tidy
           cd example
