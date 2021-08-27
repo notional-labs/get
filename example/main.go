@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/notional-labs/get"
 )
@@ -13,7 +12,6 @@ func main() {
 	if err != nil {
 		fmt.Println("cannot get pwd")
 	}
-	joiner := []string{dir, "genesis.json"}
-	path := strings.Join(joiner, "")
-	get.Get(path, "Qmc54DreioPpPDUdJW6bBTYUKepmcPsscfqsfFcFmTaVig")
+	fmt.Println(dir)
+	get.Get(dir+"/genesis.json", "Qmc54DreioPpPDUdJW6bBTYUKepmcPsscfqsfFcFmTaVig")
 }
