@@ -177,6 +177,9 @@ func Get(fspath string, cid string) {
 	defer cancel()
 
 	ipfs, err := http(ctx)
+	if err != nil {
+		fmt.Println("context -> http error")
+	}
 
 	go Connect(ctx, ipfs, nil)
 
@@ -186,6 +189,9 @@ func Get(fspath string, cid string) {
 	}
 
 	out, err := ipfs.Unixfs().Get(ctx, iPath)
+	if err != nil {
+		fmt.Println("err on the old unixfs")
+	}
 
 	progress := true
 
