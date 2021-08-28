@@ -161,11 +161,12 @@ func http(ctx context.Context) (iface.CoreAPI, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	err = httpApi.Request("version").Exec(ctx, nil)
 	if err != nil {
 		return nil, err
 	}
-	return httpApi, nil
+	return httpApi, err
 }
 
 // Get takes fspath and cid, and then downloads a file from ipfs
@@ -174,14 +175,17 @@ func Get(fspath string, cid string) {
 	defer DoCleanup()
 
 	ctx, cancel := context.WithCancel(context.Background())
+
 	defer cancel()
 
 	ipfs, err := http(ctx)
 	if err != nil {
-		fmt.Println("context -> http error")
+		fmt.Println(err)
+		fmt.Println("flksdfj")
 	}
 
-	go Connect(ctx, ipfs, nil)
+	var nilslice []string = nil
+	go Connect(ctx, ipfs, nilslice)
 
 	iPath, err := ParsePath(cid)
 	if err != nil {
