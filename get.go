@@ -1,25 +1,21 @@
 package get
 
 import (
-	
-		"context"
-		"fmt"
-		"io"
-		"log"
-		"net/url"
-		gopath "path"
-		"path/filepath"
-		"sync"
-	
-		"github.com/cheggaaa/pb/v3"
-		files "github.com/ipfs/go-ipfs-files"
-		ipfshttp "github.com/ipfs/go-ipfs-http-client"
-		iface "github.com/ipfs/interface-go-ipfs-core"
-		ipath "github.com/ipfs/interface-go-ipfs-core/path"
-		"github.com/libp2p/go-libp2p-core/peer"
-		ma "github.com/multiformats/go-multiaddr"
+	"io"
+	"log"
+	"net/url"
+	gopath "path"
+	"path/filepath"
+	"sync"
 
-	
+	"github.com/cheggaaa/pb/v3"
+	files "github.com/ipfs/go-ipfs-files"
+	ipfshttp "github.com/ipfs/go-ipfs-http-client"
+	iface "github.com/ipfs/interface-go-ipfs-core"
+	ipath "github.com/ipfs/interface-go-ipfs-core/path"
+	"github.com/libp2p/go-libp2p-core/peer"
+	ma "github.com/multiformats/go-multiaddr"
+
 	"context"
 	"fmt"
 	"io/ioutil"
@@ -30,7 +26,6 @@ import (
 	"github.com/ipfs/go-ipfs/core/coreapi"
 	"github.com/ipfs/go-ipfs/core/node/libp2p"
 	"github.com/ipfs/go-ipfs/repo/fsrepo"
-	iface "github.com/ipfs/interface-go-ipfs-core"
 	"github.com/ipfs/interface-go-ipfs-core/options"
 )
 
@@ -106,9 +101,6 @@ func tmpNode(ctx context.Context) (iface.CoreAPI, error) {
 	}
 	return open(ctx, dir)
 }
-
-
-
 
 var (
 	cleanup      []func() error
