@@ -1,24 +1,114 @@
 package get
 
 import (
+	
+		"context"
+		"fmt"
+		"io"
+		"log"
+		"net/url"
+		gopath "path"
+		"path/filepath"
+		"sync"
+	
+		"github.com/cheggaaa/pb/v3"
+		files "github.com/ipfs/go-ipfs-files"
+		ipfshttp "github.com/ipfs/go-ipfs-http-client"
+		iface "github.com/ipfs/interface-go-ipfs-core"
+		ipath "github.com/ipfs/interface-go-ipfs-core/path"
+		"github.com/libp2p/go-libp2p-core/peer"
+		ma "github.com/multiformats/go-multiaddr"
+
+	
 	"context"
 	"fmt"
-	"io"
-	"log"
-	"net/url"
+	"io/ioutil"
 	"os"
-	gopath "path"
-	"path/filepath"
-	"sync"
 
-	"github.com/cheggaaa/pb/v3"
-	files "github.com/ipfs/go-ipfs-files"
-	ipfshttp "github.com/ipfs/go-ipfs-http-client"
+	config "github.com/ipfs/go-ipfs-config"
+	"github.com/ipfs/go-ipfs/core"
+	"github.com/ipfs/go-ipfs/core/coreapi"
+	"github.com/ipfs/go-ipfs/core/node/libp2p"
+	"github.com/ipfs/go-ipfs/repo/fsrepo"
 	iface "github.com/ipfs/interface-go-ipfs-core"
-	ipath "github.com/ipfs/interface-go-ipfs-core/path"
-	"github.com/libp2p/go-libp2p-core/peer"
-	ma "github.com/multiformats/go-multiaddr"
+	"github.com/ipfs/interface-go-ipfs-core/options"
 )
+
+type CfgOpt func(*config.Config)
+
+func Spawn(ctx context.Context) (iface.CoreAPI, error) {
+	defaultPath, err := config.PathRoot()
+	if err != nil {
+		// shouldn't be possible
+		return nil, err
+	}
+
+	ipfs, err := open(ctx, defaultPath)
+	if err == nil {
+		return ipfs, nil
+	}
+
+	return tmpNode(ctx)
+}
+
+func open(ctx context.Context, repoPath string) (iface.CoreAPI, error) {
+	// Open the repo
+	r, err := fsrepo.Open(repoPath)
+	if err != nil {
+		return nil, err
+	}
+
+	// Construct the node
+	node, err := core.NewNode(ctx, &core.BuildCfg{
+		Online:  true,
+		Routing: libp2p.DHTClientOption,
+		Repo:    r,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return coreapi.NewCoreAPI(node)
+}
+
+func Temp(ctx context.Context) (iface.CoreAPI, error) {
+	return tmpNode(ctx)
+}
+
+func tmpNode(ctx context.Context) (iface.CoreAPI, error) {
+	dir, err := ioutil.TempDir("", "ipfs-shell")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get temp dir: %s", err)
+	}
+
+	// Cleanup temp dir on exit
+	AddCleanup(func() error {
+		return os.RemoveAll(dir)
+	})
+
+	identity, err := config.CreateIdentity(ioutil.Discard, []options.KeyGenerateOption{
+		options.Key.Type(options.Ed25519Key),
+	})
+	if err != nil {
+		return nil, err
+	}
+	cfg, err := config.InitWithIdentity(identity)
+	if err != nil {
+		return nil, err
+	}
+
+	// configure the temporary node
+	cfg.Routing.Type = "dhtclient"
+
+	err = fsrepo.Init(dir, cfg)
+	if err != nil {
+		return nil, fmt.Errorf("failed to init ephemeral node: %s", err)
+	}
+	return open(ctx, dir)
+}
+
+
+
 
 var (
 	cleanup      []func() error
