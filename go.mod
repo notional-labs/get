@@ -3,19 +3,20 @@ module github.com/notional-labs/get
 go 1.18
 
 require (
-	github.com/cheggaaa/pb v1.0.29
-	github.com/ipfs/go-ipfs v0.12.2
-	github.com/ipfs/go-ipfs-config v0.19.0
-	github.com/ipfs/go-ipfs-files v0.1.1
-	github.com/ipfs/go-ipfs-http-client v0.3.1
-	github.com/ipfs/interface-go-ipfs-core v0.7.0
-	github.com/libp2p/go-libp2p-core v0.15.1
-	github.com/multiformats/go-multiaddr v0.5.0
+	github.com/cheggaaa/pb/v3 v3.0.8
+	github.com/ipfs/go-ipfs v0.11.0
+	github.com/ipfs/go-ipfs-config v0.18.0
+	github.com/ipfs/go-ipfs-files v0.0.9
+	github.com/ipfs/go-ipfs-http-client v0.2.0
+	github.com/ipfs/interface-go-ipfs-core v0.5.2
+	github.com/libp2p/go-libp2p-core v0.11.0
+	github.com/multiformats/go-multiaddr v0.4.1
 )
 
 require (
 	bazil.org/fuse v0.0.0-20200117225306-7b5117fecadc // indirect
 	github.com/Stebalien/go-bitfield v0.0.1 // indirect
+	github.com/VividCortex/ewma v1.1.1 // indirect
 	github.com/alecthomas/units v0.0.0-20210927113745-59d0afb8317a // indirect
 	github.com/benbjohnson/clock v1.1.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -29,6 +30,7 @@ require (
 	github.com/davidlazar/go-crypto v0.0.0-20200604182044-b73af7476f6c // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/facebookgo/atomicfile v0.0.0-20151019160806-2de1f203e7d5 // indirect
+	github.com/fatih/color v1.10.0 // indirect
 	github.com/flynn/noise v1.0.0 // indirect
 	github.com/francoispqt/gojay v1.2.13 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
@@ -142,8 +144,9 @@ require (
 	github.com/marten-seemann/qtls-go1-16 v0.1.4 // indirect
 	github.com/marten-seemann/qtls-go1-17 v0.1.0 // indirect
 	github.com/marten-seemann/tcp v0.0.0-20210406111302-dfbc87cc63fd // indirect
+	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/mattn/go-isatty v0.0.13 // indirect
-	github.com/mattn/go-runewidth v0.0.4 // indirect
+	github.com/mattn/go-runewidth v0.0.12 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/miekg/dns v1.1.43 // indirect
 	github.com/mikioh/tcpinfo v0.0.0-20190314235526-30a79bb1804b // indirect
@@ -170,6 +173,7 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.30.0 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
+	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/spacemonkeygo/spacelog v0.0.0-20180420211403-2296661a0572 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect

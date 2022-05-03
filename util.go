@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/cheggaaa/pb"
+	"github.com/cheggaaa/pb/v3"
 	files "github.com/ipfs/go-ipfs-files"
 	ipfshttp "github.com/ipfs/go-ipfs-http-client"
 	iface "github.com/ipfs/interface-go-ipfs-core"
