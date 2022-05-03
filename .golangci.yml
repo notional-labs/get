@@ -4,6 +4,7 @@ linters:
   # Enable all available linters.
   # Default: false
   enable-all: true
+
   # Enable presets.
   # https://golangci-lint.run/usage/linters
 

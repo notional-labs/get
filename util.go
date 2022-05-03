@@ -33,7 +33,6 @@ func Connect(ctx context.Context, ipfs iface.CoreAPI, peers []string) {
 		addr, err := ma.NewMultiaddr(addrStr)
 		if err != nil {
 			fmt.Println("multiaddress issue!")
-
 		}
 		pii, err := peer.AddrInfoFromP2pAddr(addr)
 		if err != nil {
@@ -98,7 +97,7 @@ func writeToRec(nd files.Node, fpath string, bar *pb.ProgressBar) error {
 		}
 		return nil
 	case files.Directory:
-		err := os.Mkdir(fpath, 0777)
+		err := os.Mkdir(fpath, 0o777)
 		if err != nil {
 			return err
 		}
@@ -171,7 +170,7 @@ func http(ctx context.Context) (iface.CoreAPI, error) {
 
 // Get takes fspath and cid, and then downloads a file from ipfs
 func Get(fspath string, cid string) {
-	//cleanup when done
+	// cleanup when done
 	defer DoCleanup()
 
 	ctx, cancel := context.WithCancel(context.Background())
