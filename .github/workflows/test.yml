@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-go@v2.1.4
+      - uses: actions/setup-go@v3
         with:
           go-version: '^1.18'
 
@@ -15,5 +15,5 @@ jobs:
         run: go install ./...
         
       - name: execute
-        run: example
+        run: get
           
