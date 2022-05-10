@@ -111,7 +111,6 @@ func createNode(ctx context.Context, repoPath string) (icore.CoreAPI, error) {
 	return coreapi.NewCoreAPI(node)
 }
 
-
 // Spawns a node to be used just for this run (i.e. creates a tmp repo)
 func spawnEphemeral(ctx context.Context) (icore.CoreAPI, error) {
 	if err := setupPlugins(""); err != nil {
@@ -198,11 +197,7 @@ func getUnixfsNode(path string) (files.Node, error) {
 	return f, nil
 }
 
-
-
 func Get(genesis cid) {
-
-
 	fmt.Println("Fetching Genesis")
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -216,8 +211,6 @@ func Get(genesis cid) {
 	}
 
 	fmt.Println("IPFS node is running")
-
-
 
 	/// --- Part III: Getting the file and directory you added back
 
@@ -239,8 +232,6 @@ func Get(genesis cid) {
 	}
 
 	fmt.Printf("Got file back from IPFS (IPFS path: %s) and wrote it to %s\n", cidFile.String(), outputPathFile)
-
-
 
 	/// --- Part IV: Getting a file from the IPFS Network
 
@@ -278,5 +269,4 @@ func Get(genesis cid) {
 	}
 
 	fmt.Printf("Wrote the file to %s\n", outputPath)
-
 }
