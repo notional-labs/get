@@ -1,4 +1,4 @@
-package get
+package main
 
 import (
 	"context"
@@ -197,7 +197,10 @@ func getUnixfsNode(path string) (files.Node, error) {
 	return f, nil
 }
 
-func Get(genesis cid) {
+
+
+// TODO: https://github.com/ipfs/go-ipfs/issues/8543
+func Get(path string, cid string) {
 	fmt.Println("Fetching Genesis")
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -212,26 +215,6 @@ func Get(genesis cid) {
 
 	fmt.Println("IPFS node is running")
 
-	/// --- Part III: Getting the file and directory you added back
-
-	outputBasePath, err := ioutil.TempDir("", "example")
-	if err != nil {
-		panic(fmt.Errorf("could not create output dir (%v)", err))
-	}
-	fmt.Printf("output folder: %s\n", outputBasePath)
-	outputPathFile := outputBasePath + strings.Split(cidFile.String(), "/")[2]
-
-	rootNodeFile, err := ipfs.Unixfs().Get(ctx, cid)
-	if err != nil {
-		panic(fmt.Errorf("Could not get file with CID: %s", err))
-	}
-
-	err = files.WriteTo(rootNodeFile, outputPathFile)
-	if err != nil {
-		panic(fmt.Errorf("Could not write out the fetched CID: %s", err))
-	}
-
-	fmt.Printf("Got file back from IPFS (IPFS path: %s) and wrote it to %s\n", cidFile.String(), outputPathFile)
 
 	/// --- Part IV: Getting a file from the IPFS Network
 
@@ -252,21 +235,26 @@ func Get(genesis cid) {
 		}
 	}()
 
-	exampleCIDStr := "QmUaoioqU7bxezBQZkUcgcSyokatMY71sxsALxQmRRrHrj"
 
-	fmt.Printf("Fetching a file from the network with CID %s\n", exampleCIDStr)
-	outputPath := outputBasePath + exampleCIDStr
-	testCID := icorepath.New(exampleCIDStr)
+	fmt.Printf("Fetching a file from the network with CID %s\n", cid)
+	testCID := icorepath.New(cid)
 
 	rootNode, err := ipfs.Unixfs().Get(ctx, testCID)
 	if err != nil {
 		panic(fmt.Errorf("Could not get file with CID: %s", err))
 	}
 
-	err = files.WriteTo(rootNode, outputPath)
+	err = files.WriteTo(rootNode, path)
 	if err != nil {
 		panic(fmt.Errorf("Could not write out the fetched CID: %s", err))
 	}
 
-	fmt.Printf("Wrote the file to %s\n", outputPath)
+	fmt.Printf("Wrote the file to %s\n", path)
 }
+
+
+
+
+func main (
+	Get("genesis.json", "QmXRvBT3hgoXwwPqbK6a2sXUuArGM8wPyo1ybskyyUwUxs")
+)
