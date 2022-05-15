@@ -2,13 +2,11 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 
 	files "github.com/ipfs/go-ipfs-files"
@@ -56,22 +54,6 @@ func createTempRepo() (string, error) {
 	cfg, err := config.Init(ioutil.Discard, 2048)
 	if err != nil {
 		return "", err
-	}
-
-	// When creating the repository, you can define custom settings on the repository, such as enabling experimental
-	// features (See experimental-features.md) or customizing the gateway endpoint.
-	// To do such things, you should modify the variable `cfg`. For example:
-	if *flagExp {
-		// https://github.com/ipfs/go-ipfs/blob/master/docs/experimental-features.md#ipfs-filestore
-		cfg.Experimental.FilestoreEnabled = true
-		// https://github.com/ipfs/go-ipfs/blob/master/docs/experimental-features.md#ipfs-urlstore
-		cfg.Experimental.UrlstoreEnabled = true
-		// https://github.com/ipfs/go-ipfs/blob/master/docs/experimental-features.md#ipfs-p2p
-		cfg.Experimental.Libp2pStreamMounting = true
-		// https://github.com/ipfs/go-ipfs/blob/master/docs/experimental-features.md#p2p-http-proxy
-		cfg.Experimental.P2pHttpProxy = true
-		// https://github.com/ipfs/go-ipfs/blob/master/docs/experimental-features.md#strategic-providing
-		cfg.Experimental.StrategicProviding = true
 	}
 
 	// Create the repo with the config
@@ -197,8 +179,6 @@ func getUnixfsNode(path string) (files.Node, error) {
 	return f, nil
 }
 
-
-
 // TODO: https://github.com/ipfs/go-ipfs/issues/8543
 func Get(path string, cid string) {
 	fmt.Println("Fetching Genesis")
@@ -214,7 +194,6 @@ func Get(path string, cid string) {
 	}
 
 	fmt.Println("IPFS node is running")
-
 
 	/// --- Part IV: Getting a file from the IPFS Network
 
@@ -235,7 +214,6 @@ func Get(path string, cid string) {
 		}
 	}()
 
-
 	fmt.Printf("Fetching a file from the network with CID %s\n", cid)
 	testCID := icorepath.New(cid)
 
@@ -252,9 +230,9 @@ func Get(path string, cid string) {
 	fmt.Printf("Wrote the file to %s\n", path)
 }
 
+func main() {
+	todownload := "genesis.json"
+	cid := "QmXRvBT3hgoXwwPqbK6a2sXUuArGM8wPyo1ybskyyUwUxs"
 
-
-
-func main (
-	Get("genesis.json", "QmXRvBT3hgoXwwPqbK6a2sXUuArGM8wPyo1ybskyyUwUxs")
-)
+	Get(todownload, cid)
+}
