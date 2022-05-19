@@ -125,7 +125,6 @@ func connectToPeers(ctx context.Context, ipfs icore.CoreAPI, peers []string) err
 		if !ok {
 			pi = &peer.AddrInfo{
 				ID:    pii.ID,
-				Addrs: nil,
 			}
 			peerInfos[pi.ID] = pi
 		}
