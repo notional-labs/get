@@ -4,6 +4,14 @@ linters:
   # Enable all available linters.
   # Default: false
   enable-all: true
+  disable: 
+    - gci
+    - ireturn
+    - wsl
+    - forbidigo
+    - gomnd
+    - wrapcheck
+    - varnamelen
 
   # Enable presets.
   # https://golangci-lint.run/usage/linters

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 	"path/filepath"
 	"sync"
 
@@ -18,7 +17,7 @@ import (
 	"github.com/ipfs/go-ipfs/core"
 	"github.com/ipfs/go-ipfs/core/coreapi"
 	"github.com/ipfs/go-ipfs/core/node/libp2p"
-	"github.com/ipfs/go-ipfs/plugin/loader" // This package is needed so that all the preloaded plugins are loaded automatically
+	"github.com/ipfs/go-ipfs/plugin/loader" // Loads default plugins
 	"github.com/ipfs/go-ipfs/repo/fsrepo"
 	"github.com/libp2p/go-libp2p-core/peer"
 )
@@ -29,16 +28,16 @@ func setupPlugins(externalPluginsPath string) error {
 	// Load any external plugins if available on externalPluginsPath
 	plugins, err := loader.NewPluginLoader(filepath.Join(externalPluginsPath, "plugins"))
 	if err != nil {
-		return fmt.Errorf("error loading plugins: %s", err)
+		return fmt.Errorf("error loading plugins: %w", err)
 	}
 
 	// Load preloaded and external plugins
 	if err := plugins.Initialize(); err != nil {
-		return fmt.Errorf("error initializing plugins: %s", err)
+		return fmt.Errorf("error initializing plugins: %w", err)
 	}
 
 	if err := plugins.Inject(); err != nil {
-		return fmt.Errorf("error initializing plugins: %s", err)
+		return fmt.Errorf("error initializing plugins: %w", err)
 	}
 
 	return nil
@@ -47,7 +46,7 @@ func setupPlugins(externalPluginsPath string) error {
 func createTempRepo() (string, error) {
 	repoPath, err := ioutil.TempDir("", "ipfs-shell")
 	if err != nil {
-		return "", fmt.Errorf("failed to get temp dir: %s", err)
+		return "", fmt.Errorf("failed to get temp dir: %w", err)
 	}
 
 	// Create a config with default options and a 2048 bit key
@@ -59,7 +58,7 @@ func createTempRepo() (string, error) {
 	// Create the repo with the config
 	err = fsrepo.Init(repoPath, cfg)
 	if err != nil {
-		return "", fmt.Errorf("failed to init ephemeral node: %s", err)
+		return "", fmt.Errorf("failed to init ephemeral node: %w", err)
 	}
 
 	return repoPath, nil
@@ -67,7 +66,7 @@ func createTempRepo() (string, error) {
 
 /// ------ Spawning the node
 
-// Creates an IPFS node and returns its coreAPI
+// Creates an IPFS node and returns its coreAPI.
 func createNode(ctx context.Context, repoPath string) (icore.CoreAPI, error) {
 	// Open the repo
 	repo, err := fsrepo.Open(repoPath)
@@ -78,10 +77,14 @@ func createNode(ctx context.Context, repoPath string) (icore.CoreAPI, error) {
 	// Construct the node
 
 	nodeOptions := &core.BuildCfg{
-		Online:  true,
-		Routing: libp2p.DHTOption, // This option sets the node to be a full DHT node (both fetching and storing DHT Records)
-		// Routing: libp2p.DHTClientOption, // This option sets the node to be a client DHT node (only fetching records)
-		Repo: repo,
+		Online:                      true,
+		Routing:                     libp2p.DHTClientOption, // client DHT node (only fetching records)
+		Repo:                        repo,
+		NilRepo:                     false,
+		ExtraOpts:                   nil,
+		Permanent:                   false,
+		DisableEncryptedConnections: false,
+		Host:                        nil,
 	}
 
 	node, err := core.NewNode(ctx, nodeOptions)
@@ -93,7 +96,7 @@ func createNode(ctx context.Context, repoPath string) (icore.CoreAPI, error) {
 	return coreapi.NewCoreAPI(node)
 }
 
-// Spawns a node to be used just for this run (i.e. creates a tmp repo)
+// Spawns a node to be used just for this run (i.e. creates a tmp repo).
 func spawnEphemeral(ctx context.Context) (icore.CoreAPI, error) {
 	if err := setupPlugins(""); err != nil {
 		return nil, err
@@ -102,7 +105,7 @@ func spawnEphemeral(ctx context.Context) (icore.CoreAPI, error) {
 	// Create a Temporary Repo
 	repoPath, err := createTempRepo()
 	if err != nil {
-		return nil, fmt.Errorf("failed to create temp repo: %s", err)
+		return nil, fmt.Errorf("failed to create temp repo: %w", err)
 	}
 
 	// Spawning an ephemeral IPFS node
@@ -125,7 +128,10 @@ func connectToPeers(ctx context.Context, ipfs icore.CoreAPI, peers []string) err
 		}
 		pi, ok := peerInfos[pii.ID]
 		if !ok {
-			pi = &peer.AddrInfo{ID: pii.ID}
+			pi = &peer.AddrInfo{
+				ID:    pii.ID,
+				Addrs: nil,
+			}
 			peerInfos[pi.ID] = pi
 		}
 		pi.Addrs = append(pi.Addrs, pii.Addrs...)
@@ -142,44 +148,10 @@ func connectToPeers(ctx context.Context, ipfs icore.CoreAPI, peers []string) err
 		}(peerInfo)
 	}
 	wg.Wait()
+
 	return nil
 }
 
-func getUnixfsFile(path string) (files.File, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	st, err := file.Stat()
-	if err != nil {
-		return nil, err
-	}
-
-	f, err := files.NewReaderPathFile(path, file, st)
-	if err != nil {
-		return nil, err
-	}
-
-	return f, nil
-}
-
-func getUnixfsNode(path string) (files.Node, error) {
-	st, err := os.Stat(path)
-	if err != nil {
-		return nil, err
-	}
-
-	f, err := files.NewSerialFile(path, false, st)
-	if err != nil {
-		return nil, err
-	}
-
-	return f, nil
-}
-
-// TODO: https://github.com/ipfs/go-ipfs/issues/8543
 func Get(path string, cid string) {
 	fmt.Println("Fetching Genesis")
 
@@ -190,7 +162,7 @@ func Get(path string, cid string) {
 	fmt.Println("Spawning node on a temporary repo")
 	ipfs, err := spawnEphemeral(ctx)
 	if err != nil {
-		panic(fmt.Errorf("failed to spawn ephemeral node: %s", err))
+		panic(fmt.Errorf("failed to spawn ephemeral node: %w", err))
 	}
 
 	fmt.Println("IPFS node is running")
@@ -222,7 +194,7 @@ func Get(path string, cid string) {
 	go func() {
 		err := connectToPeers(ctx, ipfs, bootstrapNodes)
 		if err != nil {
-			log.Printf("failed connect to peers: %s", err)
+			fmt.Printf("failed connect to peers: %s", err)
 		}
 	}()
 
@@ -231,12 +203,12 @@ func Get(path string, cid string) {
 
 	rootNode, err := ipfs.Unixfs().Get(ctx, testCID)
 	if err != nil {
-		panic(fmt.Errorf("Could not get file with CID: %s", err))
+		panic(fmt.Errorf("could not get file with CID: %w", err))
 	}
 
 	err = files.WriteTo(rootNode, path)
 	if err != nil {
-		panic(fmt.Errorf("Could not write out the fetched CID: %s", err))
+		panic(fmt.Errorf("could not write out the fetched CID: %w", err))
 	}
 
 	fmt.Printf("Wrote the file to %s\n", path)
