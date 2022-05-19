@@ -80,11 +80,6 @@ func createNode(ctx context.Context, repoPath string) (icore.CoreAPI, error) {
 		Online:                      true,
 		Routing:                     libp2p.DHTClientOption, // client DHT node (only fetching records)
 		Repo:                        repo,
-		NilRepo:                     false,
-		ExtraOpts:                   nil,
-		Permanent:                   false,
-		DisableEncryptedConnections: false,
-		Host:                        nil,
 	}
 
 	node, err := core.NewNode(ctx, nodeOptions)
